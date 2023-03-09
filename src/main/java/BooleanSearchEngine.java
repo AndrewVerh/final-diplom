@@ -44,7 +44,8 @@ public class BooleanSearchEngine implements SearchEngine {
 
     @Override
     public List<PageEntry> search(String word) {
-        // тут реализуйте поиск по слову
-        return Collections.emptyList();
+        List<PageEntry> result = dataBase.get(word);
+        Collections.sort(result);
+        return result;
     }
 }
