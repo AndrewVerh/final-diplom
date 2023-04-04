@@ -20,7 +20,7 @@ public class BooleanSearchEngine implements SearchEngine {
                 var page = doc.getPage(i);
                 var text = PdfTextExtractor.getTextFromPage(page);
                 var words = text.split("\\P{IsAlphabetic}+");
-                Map<String, Integer> frequences = new HashMap<>(); // мапа, где ключ это слово, а значение - частота
+                Map<String, Integer> frequences = new HashMap<>(); // мапа<ключ, частота>
                 for (var word : words) { // перебираем слова
                     if (word.isEmpty()) {
                         continue;
@@ -36,16 +36,26 @@ public class BooleanSearchEngine implements SearchEngine {
                         dataBase.put(word, new ArrayList<>());
                         dataBase.get(word).add(pageEntry);
                     }
+                    List<PageEntry> result = dataBase.getOrDefault(word.toLowerCase(), Collections.emptyList());
+                    Collections.sort(result);
                 }
-            }
-        }
 
+            }
+
+        }
+        // Сортировка страниц для каждого слова
+        for (List<PageEntry> pages : dataBase.values()) {
+            Collections.sort(pages);
+        }
     }
 
     @Override
     public List<PageEntry> search(String word) {
         List<PageEntry> result = dataBase.get(word);
-        Collections.sort(result);
-        return result;
+        if (result != null) {
+            return new ArrayList<>(result); // Возврат копии, предварительно отсортированных страниц
+        } else {
+            return new ArrayList<>();
+        }
     }
 }
