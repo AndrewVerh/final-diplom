@@ -51,7 +51,7 @@ public class BooleanSearchEngine implements SearchEngine {
 
     @Override
     public List<PageEntry> search(String word) {
-        List<PageEntry> result = dataBase.get(word);
+        List<PageEntry> result = dataBase.get(word.toLowerCase());
         if (result != null) {
             return new ArrayList<>(result); // Возврат копии, предварительно отсортированных страниц
         } else {
